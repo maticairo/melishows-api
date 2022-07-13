@@ -35,7 +35,7 @@ func (s Service) GetAllShows() *models.AllShows {
 }
 
 func (s Service) GetAvailableSeats(showID, functionID string) (models.AvailableSeats, error) {
-	allShows := s.repository.GetAllShows()
+	allShows := s.GetAllShows()
 
 	response := models.AvailableSeats{
 		Show:     showID,
