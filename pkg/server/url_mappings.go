@@ -13,19 +13,21 @@ func MapURLs() *mux.Router {
 	controller := melishows.NewController()
 
 	router := mux.NewRouter()
+
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Hi Mate!")
+		middlewares.ResponseWithJSON(w, "Hi Mate! Perhaps you may want to read our Readme.md file ;)")
 	})
 	router.HandleFunc("/_ah/warmup", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("warmup done")
 	})
 	router.HandleFunc("/ping", middlewares.Ping)
+
 	router.HandleFunc("/getAllShows", controller.GetAllShows)
-	//router.HandleFunc("/searchShows", melishows.ReadSomething).Methods("POST")
+	router.HandleFunc("/searchShows", controller.SearchShows)
 	router.HandleFunc("/getAvailableSeats",
 		controller.GetAvailableSeats).Queries(
 		"show_id", "{showID}",
-		"function_id", "{function_id}")
+		"function_id", "{functionID}")
 	router.HandleFunc("/book",
 		controller.BookSeats).Methods("POST")
 

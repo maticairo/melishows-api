@@ -37,6 +37,13 @@ func LoadData() (models.AllShows, []models.Theater) {
 		panic(err)
 	}
 
+	/*for _, s := range allShows {
+		for _, f := range s.Functions {
+			t, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+			f.ShowDate = t
+		}
+	}*/
+
 	return allShows, allTheaters
 
 	/*

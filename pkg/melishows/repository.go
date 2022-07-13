@@ -28,8 +28,8 @@ func (r Repository) GetAllTheaters() *[]models.Theater {
 	return &r.allTheaters
 }
 
-func (r Repository) UpdateAllShows(allShows *models.AllShows) {
-	r.allShows = *allShows
+func (r Repository) UpdateAllShows(allShows models.AllShows) {
+	r.allShows = allShows
 }
 
 func (r Repository) SaveReservation(information models.BookingInformation) {

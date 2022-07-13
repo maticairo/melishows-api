@@ -7,5 +7,5 @@ type SearchCriteria struct {
 	DateTo    time.Time `json:"date_to"`
 	PriceFrom int       `json:"price_from"`
 	PriceTo   int       `json:"price_to"`
-	Order     string    `json:"order"`
+	OrderKind string    `json:"order_kind"`
 }

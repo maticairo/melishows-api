@@ -1,13 +1,14 @@
 package models
 
+import "time"
+
 type Function struct {
-	ID            string        `json:"id"`
-	Day           string        `json:"day"`
-	StartingTime  string        `json:"starting_time"`
-	Duration      int           `json:"duration"`
-	TheaterID     string        `json:"theater_id"`
-	TheaterRoomID string        `json:"theater_room_id"`
-	Pricing       []SeatPricing `json:"pricing"`
+	ID            string         `json:"id"`
+	ShowDate      time.Time      `json:"show_date"`
+	Duration      int            `json:"duration"`
+	TheaterID     string         `json:"theater_id"`
+	TheaterRoomID string         `json:"theater_room_id"`
+	Pricing       []*SeatPricing `json:"pricing"`
 }
 
 type AllFunctions []Function

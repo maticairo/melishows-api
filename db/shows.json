@@ -5,8 +5,7 @@
     "functions": [
       {
         "id": "7c336060-02c7-4d30-aec0-507e7b4c4c40",
-        "day": "monday",
-        "starting_time": "",
+        "show_date": "2006-01-02T15:04:05Z",
         "duration": 120,
         "theater_id": "1eed8488-bac2-466c-95a8-cc6c450082b5",
         "theater_room_id": "28dea577-40a7-49c6-b37e-c6760f68d49a",
@@ -651,8 +650,7 @@
       },
       {
         "id": "d122ca4f-58d3-4b6f-8344-bcb8f915d655",
-        "day": "tuesday",
-        "starting_time": "",
+        "show_date": "2006-01-02T15:04:05Z",
         "duration": 120,
         "theater_id": "1eed8488-bac2-466c-95a8-cc6c450082b5",
         "theater_room_id": "4e3ae664-a47c-48c9-b8c5-241902003c74",

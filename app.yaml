@@ -4,14 +4,3 @@ main: ./cmd
 
 #env_variables:
 #  PORT: "8081"
-
-#inbound_services:
-#  - warmup
-
-#basic_scaling:
-#  max_instances: 2
-#  idle_timeout: 30m
-
-#handlers:
-#  - url: /.*
-#    script: auto
