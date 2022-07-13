@@ -5,9 +5,6 @@ main: ./cmd
 env_variables:
   PORT: "3000"
 
-automatic_scaling:
-  min_instances: 1
-  max_instances: 3
-  min_pending_latency: 30ms
-  max_pending_latency: automatic
-  max_concurrent_requests: 100
+basic_scaling:
+  max_instances: 2
+  idle_timeout: 30m
