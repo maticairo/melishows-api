@@ -23,15 +23,15 @@ func (as AllShows) FindShow(showID string) *Show {
 }
 
 func (as AllShows) FindByDate(dateFrom, dateTo time.Time) AllShows {
-	var shows AllShows
+	var showIDs []string
 	for _, s := range as {
 		for _, f := range s.Functions {
 			if (f.Date.After(dateFrom) || f.Date.Equal(dateFrom)) && (f.Date.Before(dateTo) || f.Date.Equal(dateTo)) {
-				shows = append(shows, s)
+				showIDs = as.addShowID(showIDs, s.ID)
 			}
 		}
 	}
-	return shows
+	return as.getAllShowsByID(showIDs)
 }
 
 func (as AllShows) FindByPrice(priceFrom, priceTo int) AllShows {
@@ -39,17 +39,17 @@ func (as AllShows) FindByPrice(priceFrom, priceTo int) AllShows {
 		return as
 	}
 
-	var shows AllShows
+	var showIDs []string
 	for _, s := range as {
 		for _, f := range s.Functions {
 			for _, sp := range f.Pricing {
 				if sp.Price >= priceFrom && sp.Price <= priceTo {
-					shows = append(shows, s)
+					showIDs = as.addShowID(showIDs, s.ID)
 				}
 			}
 		}
 	}
-	return shows
+	return as.getAllShowsByID(showIDs)
 }
 
 func (as AllShows) OrderBy(orderKind string) AllShows {
@@ -61,4 +61,23 @@ func (as AllShows) OrderBy(orderKind string) AllShows {
 		}
 	})
 	return as
+}
+
+func (as AllShows) addShowID(showIDs []string, ID string) []string {
+	for _, showID := range showIDs {
+		if showID == ID {
+			return showIDs
+		}
+	}
+	showIDs = append(showIDs, ID)
+	return showIDs
+}
+
+func (as AllShows) getAllShowsByID(IDs []string) AllShows {
+	var shows AllShows
+	for _, id := range IDs {
+		sh := as.FindShow(id)
+		shows = append(shows, *sh)
+	}
+	return shows
 }
