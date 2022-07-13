@@ -1,19 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"github.com/maticairo/melishows-api/pkg/server"
 	"log"
 	"net/http"
-	"time"
+	"os"
 )
 
 func main() {
-	s := &http.Server{
-		Addr:           ":8080",
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 20,
+	router := server.MapURLs()
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+		log.Printf("Defaulting to port %s", port)
 	}
-	server.MapURLs()
-	log.Fatal(s.ListenAndServe())
+
+	log.Printf("Listening on port %s", port)
+
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), router))
 }

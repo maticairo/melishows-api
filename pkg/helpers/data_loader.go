@@ -1,34 +1,85 @@
 package helpers
 
 import (
+	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/maticairo/melishows-api/pkg/models"
+	"io/ioutil"
+	"os"
 )
 
-func LoadData() (models.Theater, models.Show) {
-	theater := models.Theater{
-		ID:    uuid.NewString(),
-		Name:  "Teatro Colon",
-		Rooms: generateTheaterRooms(),
+func LoadData() (models.AllShows, []models.Theater) {
+	//TODO load from file
+	showsJsonFile, err := os.Open("db/shows.json")
+	theatersJsonFile, err := os.Open("db/theaters.json")
+	if err != nil {
+		panic(err)
 	}
 
-	show := models.Show{
-		ID:   uuid.NewString(),
-		Name: "El Lago de los Cisnes",
-		Functions: []models.Function{
+	defer showsJsonFile.Close()
+	defer theatersJsonFile.Close()
+
+	showsByteValue, _ := ioutil.ReadAll(showsJsonFile)
+	theatersByteValue, _ := ioutil.ReadAll(theatersJsonFile)
+
+	var allShows models.AllShows
+	var allTheaters []models.Theater
+
+	err = json.Unmarshal(showsByteValue, &allShows)
+
+	if err != nil {
+		panic(err)
+	}
+
+	err = json.Unmarshal(theatersByteValue, &allTheaters)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return allShows, allTheaters
+
+	/*
+		theater := models.Theater{
+			ID:    uuid.NewString(),
+			Name:  "Teatro Colon",
+			Rooms: generateTheaterRooms(),
+		}
+
+		shows := models.AllShows{
 			{
-				ID:           uuid.NewString(),
-				Day:          "monday",
-				StartingTime: "",
-				Duration:     120,
-				Theater:      theater,
-				TheaterRoom:  *theater.Room(1),
-				Pricing:      nil,
+				ID:   uuid.NewString(),
+				Name: "El Lago de los Cisnes",
+				Functions: []models.Function{
+					{
+						ID:            uuid.NewString(),
+						Day:           "monday",
+						StartingTime:  "",
+						Duration:      120,
+						Theater:       theater,
+						TheaterRoomID: theater.Rooms[1].ID,
+						Pricing:       nil,
+					},
+					{
+						ID:            uuid.NewString(),
+						Day:           "tuesday",
+						StartingTime:  "",
+						Duration:      120,
+						Theater:       theater,
+						TheaterRoomID: theater.Rooms[1].ID,
+						Pricing: []models.SeatPricing{
+							{
+								ID:    uuid.NewString(),
+								Price: 100,
+								Seats: generateRoomSeats(),
+							},
+						},
+					},
+				},
 			},
-		},
-	}
+		}
 
-	return theater, show
+		return shows*/
 }
 
 func generateTheaterRooms() []models.Room {
