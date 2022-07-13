@@ -13,7 +13,7 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ResponseWithJSON(w http.ResponseWriter, v any, responseStatus ...int) {
+func ResponseWithJSON(w http.ResponseWriter, v interface{}, responseStatus ...int) {
 	w.Header().Set("Content-Type", "application/json")
 
 	if len(responseStatus) > 0 {

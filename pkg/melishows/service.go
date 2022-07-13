@@ -146,10 +146,10 @@ func (s Service) getTheaterRoom(theaterRoomID string, theater models.Theater) in
 	return 0
 }
 
-func (s Service) Search(searchCriteria models.SearchCriteria) models.AllShows {
+/*func (s Service) Search(searchCriteria models.SearchCriteria) models.AllShows {
 	allShows := s.repository.GetAllShows()
 	shows := allShows.FindByDate(searchCriteria.DateFrom, searchCriteria.DateTo)
 	shows = shows.FindByPrice(searchCriteria.PriceFrom, searchCriteria.PriceTo)
 	shows.OrderBy(searchCriteria.Order)
 	return shows
-}
+}*/
