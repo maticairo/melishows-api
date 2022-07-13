@@ -4,7 +4,7 @@ import "time"
 
 type Function struct {
 	ID            string         `json:"id"`
-	ShowDate      time.Time      `json:"show_date"`
+	Date          time.Time      `json:"date"`
 	Duration      int            `json:"duration"`
 	TheaterID     string         `json:"theater_id"`
 	TheaterRoomID string         `json:"theater_room_id"`

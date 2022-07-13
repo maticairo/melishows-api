@@ -16,8 +16,7 @@ type BookingInformation struct {
 	ShowName    string    `json:"show_name"`
 	TheaterName string    `json:"theater_name"`
 	TheaterRoom int       `json:"theater_room"`
-	Day         string    `json:"day"`
-	ShowDate    time.Time `json:"show_date"`
+	Date        time.Time `json:"date"`
 	Seats       []string  `json:"seats"`
 	TotalPrice  int       `json:"total_price"`
 }

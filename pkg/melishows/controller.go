@@ -165,3 +165,11 @@ func (m *Controller) SearchShows(w http.ResponseWriter, r *http.Request) {
 	middlewares.ResponseWithJSON(w, searchInformation)
 	return
 }
+
+func (m *Controller) Reset(w http.ResponseWriter, r *http.Request) {
+
+	m.service.Reset()
+
+	middlewares.ResponseWithJSON(w, "{status: ok}")
+	return
+}

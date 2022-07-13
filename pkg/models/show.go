@@ -26,7 +26,7 @@ func (as AllShows) FindByDate(dateFrom, dateTo time.Time) AllShows {
 	var shows AllShows
 	for _, s := range as {
 		for _, f := range s.Functions {
-			if (f.ShowDate.After(dateFrom) || f.ShowDate.Equal(dateFrom)) && (f.ShowDate.Before(dateTo) || f.ShowDate.Equal(dateTo)) {
+			if (f.Date.After(dateFrom) || f.Date.Equal(dateFrom)) && (f.Date.Before(dateTo) || f.Date.Equal(dateTo)) {
 				shows = append(shows, s)
 			}
 		}

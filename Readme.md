@@ -33,7 +33,7 @@ Content-Type: application/json
       "functions":[
          {
             "id":"7c336060-02c7-4d30-aec0-507e7b4c4c40",
-            "show_date": "2006-01-02T15:04:05Z",
+            "date": "2006-01-02T15:04:05Z",
             "duration":120,
             "theater_id":"1eed8488-bac2-466c-95a8-cc6c450082b5",
             "theater_room_id":"28dea577-40a7-49c6-b37e-c6760f68d49a",
@@ -63,7 +63,7 @@ Content-Type: application/json
          },
          {
             "id":"d122ca4f-58d3-4b6f-8344-bcb8f915d655",
-            "show_date": "2019-01-02T15:04:05Z",
+            "date": "2019-01-02T15:04:05Z",
             "duration":120,
             "theater_id":"1eed8488-bac2-466c-95a8-cc6c450082b5",
             "theater_room_id":"4e3ae664-a47c-48c9-b8c5-241902003c74",
@@ -153,7 +153,7 @@ https://melishows.rj.r.appspot.com/shows/search/?date_from=2005-01-01T15:04:05Z&
       "functions":[
          {
             "id":"7c336060-02c7-4d30-aec0-507e7b4c4c40",
-            "show_date": "2006-01-02T15:04:05Z",
+            "date": "2006-01-02T15:04:05Z",
             "duration":120,
             "theater_id":"1eed8488-bac2-466c-95a8-cc6c450082b5",
             "theater_room_id":"28dea577-40a7-49c6-b37e-c6760f68d49a",
@@ -218,7 +218,7 @@ https://melishows.rj.r.appspot.com/book
    "theater_name":"Teatro Colon",
    "theater_room":2,
    "day":"",
-   "show_date":"2006-01-02T15:04:05Z",
+   "date":"2006-01-02T15:04:05Z",
    "seats":[
       "1-A",
       "1-B",

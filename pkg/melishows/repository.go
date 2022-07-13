@@ -20,18 +20,25 @@ func NewRepository() *Repository {
 	return &repository
 }
 
-func (r Repository) GetAllShows() *models.AllShows {
+func (r *Repository) GetAllShows() *models.AllShows {
 	return &r.allShows
 }
 
-func (r Repository) GetAllTheaters() *[]models.Theater {
+func (r *Repository) GetAllTheaters() *[]models.Theater {
 	return &r.allTheaters
 }
 
-func (r Repository) UpdateAllShows(allShows models.AllShows) {
+func (r *Repository) UpdateAllShows(allShows models.AllShows) {
 	r.allShows = allShows
 }
 
-func (r Repository) SaveReservation(information models.BookingInformation) {
+func (r *Repository) SaveReservation(information models.BookingInformation) {
 	r.reservations = append(r.reservations, information)
+}
+
+func (r *Repository) Reset() {
+	shows, theaters := helpers.LoadData()
+	r.allShows = shows
+	r.allTheaters = theaters
+	r.reservations = []models.BookingInformation{}
 }

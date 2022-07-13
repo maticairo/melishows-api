@@ -41,3 +41,7 @@ func (c *Cache) Update(key string, value interface{}, ttl time.Duration) {
 	c.cache.Delete(key)
 	c.Set(key, value, ttl)
 }
+
+func (c *Cache) Reset() {
+	c.cache.Clear()
+}

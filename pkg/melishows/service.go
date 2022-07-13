@@ -94,27 +94,28 @@ func (s Service) BookSeats(booking models.Booking) (*models.BookingInformation, 
 
 	theater := s.getTheaterInformation(function.TheaterID)
 
-	response.ShowDate = function.ShowDate
+	response.Date = function.Date
 	response.TheaterName = theater.Name
 	response.TheaterRoom = s.getTheaterRoom(function.TheaterRoomID, theater)
 
 	for _, seatToBook := range booking.Seats {
+		var seatsToBook []string
 		for _, sp := range function.Pricing {
 			var bookedSeats = 0
-			var seatsToBook []models.Seat
 			for _, seat := range sp.Seats {
-				if !seat.Booked {
-					if fmt.Sprintf("%d-%s", seat.RowNumber, seat.Identifier) == seatToBook {
-						seatsToBook = append(seatsToBook, *seat)
+				strSeat := fmt.Sprintf("%d-%s", seat.RowNumber, seat.Identifier)
+				if strSeat == seatToBook {
+					if !seat.Booked {
+						seatsToBook = append(seatsToBook, strSeat)
 						bookedSeats++
+					} else {
+						return nil, errors.New("some Seats are already booked, please try again with other seats")
 					}
-				} else {
-					return nil, errors.New("some Seats are already booked, please try again with other seats")
 				}
 			}
 			response.TotalPrice += bookedSeats * sp.Price
-			response.Seats = append(response.Seats, seatToBook)
 		}
+		response.Seats = append(response.Seats, seatsToBook...)
 	}
 
 	updatedShows := s.updateSeats(booking.ShowID, booking.FunctionID, *allShows, response.Seats)
@@ -164,4 +165,9 @@ func (s Service) SearchShows(searchCriteria models.SearchCriteria) models.AllSho
 	shows = shows.FindByPrice(searchCriteria.PriceFrom, searchCriteria.PriceTo)
 	shows.OrderBy(searchCriteria.OrderKind)
 	return shows
+}
+
+func (s Service) Reset() {
+	s.cache.Reset()
+	s.repository.Reset()
 }
