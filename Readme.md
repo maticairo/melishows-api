@@ -228,6 +228,24 @@ https://melishows.rj.r.appspot.com/book
 }
   ```
 
+## Third party libraries
+
+[gorilla/mux v1.8.0](https://github.com/gorilla/mux)
+
+[karlseguin/ccache v2.0.8](https://github.com/karlseguin/ccache/v2)
+
+## Some considerations
+Cache implements an in-memory cache. Some considerations: I've implemented this type of cache to fulfill the
+exercise requirements and taking into account that I've deployed the application in a single VM environment.
+If we want to scale the application horizontally, we have to implement a distributed cache or a mechanism to
+synchronize the VMs (like a cron job)
+
+The repository layer loads information from two main json files and keeps it in memory. No external
+library was used to handle an in-memory DB in order to code it quickly.
+
+Tests are implemented over the main layers of this software (I've avoided testing models in order to deliver the
+exercise quickly)
+
 ## Authors
 
 Contributors names and contact info

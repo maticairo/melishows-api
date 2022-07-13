@@ -37,7 +37,17 @@ func (m *Controller) GetAvailableSeats(w http.ResponseWriter, r *http.Request) {
 	showID := r.URL.Query().Get("show_id")
 	functionID := r.URL.Query().Get("function_id")
 
-	availableSeats := m.service.GetAvailableSeats(showID, functionID)
+	if showID == "" || functionID == "" {
+		middlewares.ResponseWithJSON(w, "You must provide both show_id and function_id query params", http.StatusBadRequest)
+		return
+	}
+
+	availableSeats, err := m.service.GetAvailableSeats(showID, functionID)
+
+	if err != nil {
+		middlewares.ResponseWithJSON(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	middlewares.ResponseWithJSON(w, availableSeats)
 	return
@@ -51,19 +61,26 @@ func (m *Controller) BookSeats(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 
 	if err != nil {
-		panic(err)
+		middlewares.ResponseWithJSON(w, err.Error(), http.StatusCreated)
+		return
 	}
 
 	err = json.Unmarshal(reqBody, &booking)
 
 	if err != nil {
-		panic(err)
+		middlewares.ResponseWithJSON(w, err.Error(), http.StatusCreated)
+		return
 	}
 
 	bookingInformation, err := m.service.BookSeats(booking)
 
 	if err != nil {
 		middlewares.ResponseWithJSON(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if len(bookingInformation.Seats) == 0 {
+		middlewares.ResponseWithJSON(w, "No seats booked, please check you provided valid seats", http.StatusNoContent)
 		return
 	}
 

@@ -34,7 +34,7 @@ func (s Service) GetAllShows() *models.AllShows {
 	return allShowsFromCache.(*models.AllShows)
 }
 
-func (s Service) GetAvailableSeats(showID, functionID string) models.AvailableSeats {
+func (s Service) GetAvailableSeats(showID, functionID string) (models.AvailableSeats, error) {
 	allShows := s.repository.GetAllShows()
 
 	response := models.AvailableSeats{
@@ -44,7 +44,16 @@ func (s Service) GetAvailableSeats(showID, functionID string) models.AvailableSe
 	}
 
 	show := allShows.FindShow(showID)
+
+	if show == nil {
+		return models.AvailableSeats{}, errors.New("invalid show_id")
+	}
+
 	function := show.Functions.FindFunction(functionID)
+
+	if function == nil {
+		return models.AvailableSeats{}, errors.New("invalid function_id")
+	}
 
 	for _, sp := range function.Pricing {
 		var seats []*models.Seat
@@ -60,7 +69,7 @@ func (s Service) GetAvailableSeats(showID, functionID string) models.AvailableSe
 		response.Seats = append(response.Seats, seatPricing)
 	}
 
-	return response
+	return response, nil
 }
 
 func (s Service) BookSeats(booking models.Booking) (*models.BookingInformation, error) {
@@ -72,7 +81,17 @@ func (s Service) BookSeats(booking models.Booking) (*models.BookingInformation, 
 	}
 
 	show := allShows.FindShow(booking.ShowID)
+
+	if show == nil {
+		return nil, errors.New("invalid show_id")
+	}
+
 	function := show.Functions.FindFunction(booking.FunctionID)
+
+	if function == nil {
+		return nil, errors.New("invalid show_id")
+	}
+
 	theater := s.getTheaterInformation(function.TheaterID)
 
 	response.ShowDate = function.ShowDate
