@@ -1,348 +1,236 @@
-# REST API example application
 
-This is a bare-bones example of a Sinatra application providing a REST
-API to a DataMapper-backed model.
+# Melishows REST API
 
-The entire application is contained within the `app.rb` file.
-
-`config.ru` is a minimal Rack configuration for unicorn.
-
-`run-tests.sh` runs a simplistic test and generates the API
-documentation below.
-
-It uses `run-curl-tests.rb` which runs each command defined in
-`commands.yml`.
-
-## Install
-
-    bundle install
+This REST API is entirely built over Golang 1.16
+Deployed over GCP AppEngine
 
 ## Run the app
 
-    unicorn -p 7000
-
+`go run cmd/main.go`
 ## Run the tests
 
-    ./run-tests.sh
-
-# REST API
+`go test melishows-api`
+# REST API  Documentation
 
 The REST API to the example app is described below.
 
-## Get list of Things
+## Get list of Shows
 
 ### Request
 
-`GET /thing/`
+`GET /shows/all`
 
-    curl -i -H 'Accept: application/json' http://localhost:7000/thing/
-
+https://melishows.rj.r.appspot.com/allShows
 ### Response
 
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:30 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 2
+Status: 200 OK  
+Content-Type: application/json
+ ```
+ [
+   {
+      "id":"62963928-f501-4af3-bafd-0acce2321668",
+      "name":"El Lago de los Cisnes",
+      "functions":[
+         {
+            "id":"7c336060-02c7-4d30-aec0-507e7b4c4c40",
+            "show_date": "2006-01-02T15:04:05Z",
+            "duration":120,
+            "theater_id":"1eed8488-bac2-466c-95a8-cc6c450082b5",
+            "theater_room_id":"28dea577-40a7-49c6-b37e-c6760f68d49a",
+            "pricing":[
+               {
+                  "id":"36657660-f602-4f7f-9ad5-d2be83941609",
+                  "price":100,
+                  "seats":[
+                     {
+                        "row_number":1,
+                        "identifier":"A",
+                        "booked":false
+                     },
+                     {
+                        "row_number":1,
+                        "identifier":"B",
+                        "booked":false
+                     },
+                     {
+                        "row_number":1,
+                        "identifier":"C",
+                        "booked":false
+                     }
+                  ]
+               }
+            ]
+         },
+         {
+            "id":"d122ca4f-58d3-4b6f-8344-bcb8f915d655",
+            "show_date": "2019-01-02T15:04:05Z",
+            "duration":120,
+            "theater_id":"1eed8488-bac2-466c-95a8-cc6c450082b5",
+            "theater_room_id":"4e3ae664-a47c-48c9-b8c5-241902003c74",
+            "pricing":[
+               {
+                  "id":"36657660-f602-4f7f-9ad5-d2be83941609",
+                  "price":100,
+                  "seats":[
+                     {
+                        "row_number":1,
+                        "identifier":"A",
+                        "booked":false
+                     },
+                     {
+                        "row_number":1,
+                        "identifier":"B",
+                        "booked":false
+                     },
+                     {
+                        "row_number":1,
+                        "identifier":"C",
+                        "booked":false
+                     }
+                  ]
+               }
+            ]
+         }
+      ]
+   }
+]
+```  
 
-    []
-
-## Create a new Thing
+## Get Available Seats
 
 ### Request
 
-`POST /thing/`
+`GET /availableSeats`
 
-    curl -i -H 'Accept: application/json' -d 'name=Foo&status=new' http://localhost:7000/thing
-
+https://melishows.rj.r.appspot.com/availableSeats?show_id=62963928-f501-4af3-bafd-0acce2321668&function_id=d122ca4f-58d3-4b6f-8344-bcb8f915d655
 ### Response
 
-    HTTP/1.1 201 Created
-    Date: Thu, 24 Feb 2011 12:36:30 GMT
-    Status: 201 Created
-    Connection: close
-    Content-Type: application/json
-    Location: /thing/1
-    Content-Length: 36
+ ```
+ {
+   "show":"62963928-f501-4af3-bafd-0acce2321668",
+   "function":"7c336060-02c7-4d30-aec0-507e7b4c4c40",
+   "seats":[
+      {
+         "id":"36657660-f602-4f7f-9ad5-d2be83941609",
+         "price":100,
+         "seats":[
+            {
+               "row_number":1,
+               "identifier":"A",
+               "booked":false
+            },
+            {
+               "row_number":1,
+               "identifier":"B",
+               "booked":false
+            },
+            {
+               "row_number":1,
+               "identifier":"C",
+               "booked":false
+            }
+         ]
+      }
+   ]
+}
+ ```
 
-    {"id":1,"name":"Foo","status":"new"}
-
-## Get a specific Thing
+## Search Shows
 
 ### Request
 
-`GET /thing/id`
+`GET /shows/search`
 
-    curl -i -H 'Accept: application/json' http://localhost:7000/thing/1
+https://melishows.rj.r.appspot.com/shows/search/?date_from=2005-01-01T15:04:05Z&date_to=2015-01-01T15:04:05Z&price_from=0&price_to=1000&order_kind=DESC
 
 ### Response
 
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:30 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 36
+  ```
+   [
+   {
+      "id":"62963928-f501-4af3-bafd-0acce2321668",
+      "name":"El Lago de los Cisnes",
+      "functions":[
+         {
+            "id":"7c336060-02c7-4d30-aec0-507e7b4c4c40",
+            "show_date": "2006-01-02T15:04:05Z",
+            "duration":120,
+            "theater_id":"1eed8488-bac2-466c-95a8-cc6c450082b5",
+            "theater_room_id":"28dea577-40a7-49c6-b37e-c6760f68d49a",
+            "pricing":[
+               {
+                  "id":"36657660-f602-4f7f-9ad5-d2be83941609",
+                  "price":100,
+                  "seats":[
+                     {
+                        "row_number":1,
+                        "identifier":"A",
+                        "booked":false
+                     },
+                     {
+                        "row_number":1,
+                        "identifier":"B",
+                        "booked":false
+                     },
+                     {
+                        "row_number":1,
+                        "identifier":"C",
+                        "booked":false
+                     }
+                  ]
+               }
+            ]
+         }
+      ]
+   }
+]
+  ```
 
-    {"id":1,"name":"Foo","status":"new"}
-
-## Get a non-existent Thing
+## Book a ticket
 
 ### Request
 
-`GET /thing/id`
+`POST /book`
 
-    curl -i -H 'Accept: application/json' http://localhost:7000/thing/9999
+Body:
+```
+{
+    "show_id": "62963928-f501-4af3-bafd-0acce2321668",
+    "function_id": "7c336060-02c7-4d30-aec0-507e7b4c4c40",
+    "dni": 12345678,
+    "name": "Matias",
+    "seats": [
+        "1-A",
+        "1-B",
+        "1-C"
+	 ]
+}
+``` 
 
-### Response
-
-    HTTP/1.1 404 Not Found
-    Date: Thu, 24 Feb 2011 12:36:30 GMT
-    Status: 404 Not Found
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 35
-
-    {"status":404,"reason":"Not found"}
-
-## Create another new Thing
-
-### Request
-
-`POST /thing/`
-
-    curl -i -H 'Accept: application/json' -d 'name=Bar&junk=rubbish' http://localhost:7000/thing
+https://melishows.rj.r.appspot.com/book
 
 ### Response
-
-    HTTP/1.1 201 Created
-    Date: Thu, 24 Feb 2011 12:36:31 GMT
-    Status: 201 Created
-    Connection: close
-    Content-Type: application/json
-    Location: /thing/2
-    Content-Length: 35
-
-    {"id":2,"name":"Bar","status":null}
-
-## Get list of Things again
-
-### Request
-
-`GET /thing/`
-
-    curl -i -H 'Accept: application/json' http://localhost:7000/thing/
-
-### Response
-
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:31 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 74
-
-    [{"id":1,"name":"Foo","status":"new"},{"id":2,"name":"Bar","status":null}]
-
-## Change a Thing's state
-
-### Request
-
-`PUT /thing/:id/status/changed`
-
-    curl -i -H 'Accept: application/json' -X PUT http://localhost:7000/thing/1/status/changed
-
-### Response
-
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:31 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 40
-
-    {"id":1,"name":"Foo","status":"changed"}
-
-## Get changed Thing
-
-### Request
-
-`GET /thing/id`
-
-    curl -i -H 'Accept: application/json' http://localhost:7000/thing/1
-
-### Response
-
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:31 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 40
-
-    {"id":1,"name":"Foo","status":"changed"}
-
-## Change a Thing
-
-### Request
-
-`PUT /thing/:id`
-
-    curl -i -H 'Accept: application/json' -X PUT -d 'name=Foo&status=changed2' http://localhost:7000/thing/1
-
-### Response
-
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:31 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 41
-
-    {"id":1,"name":"Foo","status":"changed2"}
-
-## Attempt to change a Thing using partial params
-
-### Request
-
-`PUT /thing/:id`
-
-    curl -i -H 'Accept: application/json' -X PUT -d 'status=changed3' http://localhost:7000/thing/1
-
-### Response
-
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 41
-
-    {"id":1,"name":"Foo","status":"changed3"}
-
-## Attempt to change a Thing using invalid params
-
-### Request
-
-`PUT /thing/:id`
-
-    curl -i -H 'Accept: application/json' -X PUT -d 'id=99&status=changed4' http://localhost:7000/thing/1
-
-### Response
-
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 41
-
-    {"id":1,"name":"Foo","status":"changed4"}
-
-## Change a Thing using the _method hack
-
-### Request
-
-`POST /thing/:id?_method=POST`
-
-    curl -i -H 'Accept: application/json' -X POST -d 'name=Baz&_method=PUT' http://localhost:7000/thing/1
-
-### Response
-
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 41
-
-    {"id":1,"name":"Baz","status":"changed4"}
-
-## Change a Thing using the _method hack in the url
-
-### Request
-
-`POST /thing/:id?_method=POST`
-
-    curl -i -H 'Accept: application/json' -X POST -d 'name=Qux' http://localhost:7000/thing/1?_method=PUT
-
-### Response
-
-    HTTP/1.1 404 Not Found
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 404 Not Found
-    Connection: close
-    Content-Type: text/html;charset=utf-8
-    Content-Length: 35
-
-    {"status":404,"reason":"Not found"}
-
-## Delete a Thing
-
-### Request
-
-`DELETE /thing/id`
-
-    curl -i -H 'Accept: application/json' -X DELETE http://localhost:7000/thing/1/
-
-### Response
-
-    HTTP/1.1 204 No Content
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 204 No Content
-    Connection: close
-
-
-## Try to delete same Thing again
-
-### Request
-
-`DELETE /thing/id`
-
-    curl -i -H 'Accept: application/json' -X DELETE http://localhost:7000/thing/1/
-
-### Response
-
-    HTTP/1.1 404 Not Found
-    Date: Thu, 24 Feb 2011 12:36:32 GMT
-    Status: 404 Not Found
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 35
-
-    {"status":404,"reason":"Not found"}
-
-## Get deleted Thing
-
-### Request
-
-`GET /thing/1`
-
-    curl -i -H 'Accept: application/json' http://localhost:7000/thing/1
-
-### Response
-
-    HTTP/1.1 404 Not Found
-    Date: Thu, 24 Feb 2011 12:36:33 GMT
-    Status: 404 Not Found
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 35
-
-    {"status":404,"reason":"Not found"}
-
-## Delete a Thing using the _method hack
-
-### Request
-
-`DELETE /thing/id`
-
-    curl -i -H 'Accept: application/json' -X POST -d'_method=DELETE' http://localhost:7000/thing/2/
-
-### Response
-
-    HTTP/1.1 204 No Content
-    Date: Thu, 24 Feb 2011 12:36:33 GMT
-    Status: 204 No Content
-    Connection: close
+  ```
+  {
+   "dni":12345678,
+   "name":"Matias",
+   "show_name":"",
+   "theater_name":"Teatro Colon",
+   "theater_room":2,
+   "day":"",
+   "show_date":"2006-01-02T15:04:05Z",
+   "seats":[
+      "1-A",
+      "1-B",
+      "1-C"
+   ],
+   "total_price":300
+}
+  ```
+
+## Authors
+
+Contributors names and contact info
+
+ex. Matias Cairo
+ex. [@maticairo](https://www.linkedin.com/in/matias-cairo-56b7a0b6/)

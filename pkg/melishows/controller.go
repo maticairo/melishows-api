@@ -21,12 +21,18 @@ func NewController() *Controller {
 	return &controller
 }
 
+/*
+	GetAllShows returns a list with all the information about the shows
+*/
 func (m *Controller) GetAllShows(w http.ResponseWriter, r *http.Request) {
 	allShows := m.service.GetAllShows()
 	middlewares.ResponseWithJSON(w, allShows)
 	return
 }
 
+/*
+	GetAvailableSeats returns a list of the available seats given a showID and a functionID
+*/
 func (m *Controller) GetAvailableSeats(w http.ResponseWriter, r *http.Request) {
 	showID := r.URL.Query().Get("show_id")
 	functionID := r.URL.Query().Get("function_id")
@@ -37,6 +43,9 @@ func (m *Controller) GetAvailableSeats(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+/*
+	BookSeats makes a reservation of a given set of seats and returns a printable ticket
+*/
 func (m *Controller) BookSeats(w http.ResponseWriter, r *http.Request) {
 	var booking models.Booking
 	reqBody, err := ioutil.ReadAll(r.Body)
@@ -62,6 +71,14 @@ func (m *Controller) BookSeats(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+/*
+	SearchShows makes a deep search given the following params:
+		- Date from
+		- Date To
+		- Price from
+		- Price To
+		- Order Kind
+*/
 func (m *Controller) SearchShows(w http.ResponseWriter, r *http.Request) {
 	strDateFrom := r.URL.Query().Get("date_from")
 	strDateTo := r.URL.Query().Get("date_to")

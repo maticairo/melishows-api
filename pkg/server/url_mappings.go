@@ -14,6 +14,7 @@ func MapURLs() *mux.Router {
 
 	router := mux.NewRouter()
 
+	/** GCP utils */
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		middlewares.ResponseWithJSON(w, "Hi Mate! Perhaps you may want to read our Readme.md file ;)")
 	})
@@ -22,12 +23,21 @@ func MapURLs() *mux.Router {
 	})
 	router.HandleFunc("/ping", middlewares.Ping)
 
-	router.HandleFunc("/getAllShows", controller.GetAllShows)
-	router.HandleFunc("/searchShows", controller.SearchShows)
-	router.HandleFunc("/getAvailableSeats",
+	/* API endpoint */
+	router.HandleFunc("/shows/all", controller.GetAllShows)
+	router.HandleFunc("/shows/search",
+		controller.SearchShows).Queries(
+		"date_from", "{dateFrom}",
+		"date_to", "{dateTo}",
+		"price_from", "{priceFrom}",
+		"price_to", "{priceTo}",
+		"order_kind", "{orderKind}")
+
+	router.HandleFunc("/availableSeats",
 		controller.GetAvailableSeats).Queries(
 		"show_id", "{showID}",
 		"function_id", "{functionID}")
+
 	router.HandleFunc("/book",
 		controller.BookSeats).Methods("POST")
 
