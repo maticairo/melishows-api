@@ -9,6 +9,11 @@ import (
 
 func LoadData() (models.AllShows, []models.Theater) {
 	showsJsonFile, err := os.Open("db/shows.json")
+
+	if err != nil {
+		panic(err)
+	}
+
 	theatersJsonFile, err := os.Open("db/theaters.json")
 	if err != nil {
 		panic(err)

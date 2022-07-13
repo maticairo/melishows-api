@@ -10,12 +10,12 @@ import (
 )
 
 func TestIntegration_Book(t *testing.T) {
-
+	functionDate, _ := time.Parse(time.RFC3339, time.Date(2020, 01, 01, 15, 00, 00, 00, time.UTC).Format(time.RFC3339))
 	cases := []struct {
 		name             string
 		service          *melishows.Service
 		bookingRequest   models.Booking
-		expectedResponse models.BookingInformation
+		expectedResponse *models.BookingInformation
 		expectedErr      bool
 	}{
 		{
@@ -32,36 +32,19 @@ func TestIntegration_Book(t *testing.T) {
 					"1-C",
 				},
 			},
-			expectedResponse: models.BookingInformation{
-				Dni:         0,
-				Name:        "",
-				ShowName:    "",
-				TheaterName: "",
-				TheaterRoom: 0,
-				Date:        time.Time{},
-				Seats:       nil,
-				TotalPrice:  0,
-			},
-		},
-		{
-			name:    "booking_integration_test/FAIL - cached",
-			service: melishows.NewService(),
-			bookingRequest: models.Booking{
-				Dni:        0,
-				Name:       "",
-				ShowID:     "",
-				FunctionID: "",
-				Seats:      nil,
-			},
-			expectedResponse: models.BookingInformation{
-				Dni:         0,
-				Name:        "",
-				ShowName:    "",
-				TheaterName: "",
-				TheaterRoom: 0,
-				Date:        time.Time{},
-				Seats:       nil,
-				TotalPrice:  0,
+			expectedResponse: &models.BookingInformation{
+				Dni:         1,
+				Name:        "name",
+				ShowName:    "El Lago de los Cisnes",
+				TheaterName: "Teatro Colon",
+				TheaterRoom: 2,
+				Date:        functionDate,
+				Seats: []string{
+					"1-A",
+					"1-B",
+					"1-C",
+				},
+				TotalPrice: 300,
 			},
 		},
 	}

@@ -95,6 +95,7 @@ func (s Service) BookSeats(booking models.Booking) (*models.BookingInformation, 
 	theater := s.getTheaterInformation(function.TheaterID)
 
 	response.Date = function.Date
+	response.ShowName = show.Name
 	response.TheaterName = theater.Name
 	response.TheaterRoom = s.getTheaterRoom(function.TheaterRoomID, theater)
 
