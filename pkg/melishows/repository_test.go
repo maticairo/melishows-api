@@ -42,13 +42,32 @@ func TestRepository_GetAllTheaters(t *testing.T) {
 }
 
 func TestRepository_SaveReservation(t *testing.T) {
+	reservation := models.BookingInformation{
+		Dni: 1,
+	}
+	repository := NewRepository()
 	t.Run("RepositorySaveReservation", func(t *testing.T) {
-
+		repository.SaveReservation(reservation)
+		if len(repository.reservations) < 1 {
+			t.Error("No reservation saved")
+		}
 	})
 }
 
 func TestRepository_UpdateAllShows(t *testing.T) {
+	repository := NewRepository()
 	t.Run("RepositoryUpdateAllShows", func(t *testing.T) {
+		shows := repository.GetAllShows()
+		for _, show := range *shows {
+			show.Name = "UpdatedName"
+		}
+		repository.UpdateAllShows(*shows)
 
+		repository.GetAllShows()
+		for _, show := range *shows {
+			if show.Name != "UpdatedName" {
+				t.Error("Error updating shows")
+			}
+		}
 	})
 }

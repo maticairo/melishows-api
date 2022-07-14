@@ -47,6 +47,21 @@ func TestIntegration_Book(t *testing.T) {
 				TotalPrice: 300,
 			},
 		},
+		{
+			name:    "booking_integration_test/SeatAlreadyBooked",
+			service: melishows.NewService(),
+			bookingRequest: models.Booking{
+				Dni:        1,
+				Name:       "name",
+				ShowID:     "62963928-f501-4af3-bafd-0acce2321668",
+				FunctionID: "7c336060-02c7-4d30-aec0-507e7b4c4c40",
+				Seats: []string{
+					"1-A",
+				},
+			},
+			expectedResponse: nil,
+			expectedErr:      true,
+		},
 	}
 
 	for _, c := range cases {
@@ -58,7 +73,7 @@ func TestIntegration_Book(t *testing.T) {
 			}
 
 			if err == nil && c.expectedErr {
-				t.Error(fmt.Sprintf("No error %v when expected", err.Error()))
+				t.Error(fmt.Sprintf("No error when expected"))
 			}
 
 			if !reflect.DeepEqual(response, c.expectedResponse) {
